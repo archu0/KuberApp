@@ -15,7 +15,7 @@ pipeline {
             steps {
                 script {
                     try {
-                        sh "docker rmi archu09/kuberproject"
+                        sh "docker rmi sam"
                         sh "docker rm marcos"
                     }
                     catch(err) {
@@ -23,9 +23,9 @@ pipeline {
                     }
                 }
                 sh '''  mv target/KuberApp.war .
-                        docker build -t archu09/kuberproject .
+                        docker build -t sam .
                         docker login -u archu09 -p Archana09*
-                        docker tag archu09/kuberproject archu09/kuberproject
+                        docker tag sam archu09/kuberproject
                         docker push archu09/kuberproject
                     '''
             }
