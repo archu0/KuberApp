@@ -19,34 +19,19 @@ pipeline {
             }
         }
          stage('Transfer WAR to Tomcat') {
-            steps {
-                script {
-                    sshagent([CREDENTIALS_ID]) {
-                        sh """
-                            scp -o StrictHostKeyChecking=no ${WAR_FILE} ${TOMCAT_SERVER}:${TOMCAT_DIR}
-                            scp -r -o StrictHostKeyChecking=no ${APP_DIR} ${TOMCAT_SERVER}:${TOMCAT_DIR}
-                        """
-                    }
-                }
-            }
-        }
-
-        stage('Restart Tomcat') {
-            steps {
-                script {
-                    sshagent([CREDENTIALS_ID]) {
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ${TOMCAT_SERVER} <<EOF
-                            cd /root/apache-tomcat-9.0.98/bin
-                            ./shutdown.sh
-                            sleep 5
-                            ./startup.sh
-                        """
-                    }
-                }
+    steps {
+        script {
+            sshagent(['CREDENTIALS_ID']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no ${WAR_FILE} ubuntu@${TOMCAT_SERVER}:${TOMCAT_DIR}
+                    scp -r -o StrictHostKeyChecking=no ${APP_DIR} ubuntu@${TOMCAT_SERVER}:${TOMCAT_DIR}
+                """
             }
         }
     }
+}
+    }
+
 
     post {
         success {
