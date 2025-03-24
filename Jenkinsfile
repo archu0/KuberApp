@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        KUBECONFIG_TEXT = credentials('kubeconfig-id')
+    }
     
     tools{
         maven 'maven'
@@ -31,6 +34,22 @@ pipeline {
             }
         }
 
+        stage('Deploy to Kubernetes') {
+            steps {
+                script {
+                    // Save kubeconfig to a file dynamically
+                    writeFile file: "${env.WORKSPACE}/kubeconfig", text: env.KUBECONFIG_TEXT
+                }
+
+                // Use the kubeconfig file for kubectl commands
+                withEnv(["KUBECONFIG=${env.WORKSPACE}/kubeconfig"]) {
+                    sh '''
+                    kubectl get nodes
+                    kubectl apply -f k8s/deployment.yml
+                    '''
+                }
+            }
+        }
     }
     post {
         success {
