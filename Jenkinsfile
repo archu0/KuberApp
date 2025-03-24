@@ -1,7 +1,7 @@
 pipeline {
     agent any
       environment {
-        TOMCAT_SERVER = 'root@52.66.79.128'
+        TOMCAT_SERVER = 'root@52.66.204.22'
         TOMCAT_DIR = '/root/apache-tomcat-9.0.98/webapps/'
         WAR_FILE = '/var/lib/jenkins/workspace/project/target/KuberApp.war'
         APP_DIR = '/var/lib/jenkins/workspace/kuberproject/target/KuberApp'   
@@ -18,7 +18,7 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-          stage('Transfer WAR to Tomcat') {
+         stage('Transfer WAR to Tomcat') {
             steps {
                 script {
                     sshagent([CREDENTIALS_ID]) {
@@ -30,5 +30,31 @@ pipeline {
                 }
             }
         }
+
+        stage('Restart Tomcat') {
+            steps {
+                script {
+                    sshagent([CREDENTIALS_ID]) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ${TOMCAT_SERVER} <<EOF
+                            cd /root/apache-tomcat-9.0.98/bin
+                            ./shutdown.sh
+                            sleep 5
+                            ./startup.sh
+                        """
+                    }
+                }
+            }
+        }
     }
-}
+
+    post {
+        success {
+            echo 'Deployment successful'
+        }
+        failure {
+            echo 'Deployment failed'
+        }
+    }
+    }
+
