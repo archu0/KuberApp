@@ -21,11 +21,11 @@ pipeline {
          stage('Transfer WAR to Tomcat') {
     steps {
         script {
-            sshagent(['CREDENTIALS_ID']) {
-                sh """
-                    scp -o StrictHostKeyChecking=no ${WAR_FILE} ubuntu@${TOMCAT_SERVER}:${TOMCAT_DIR}
-                    scp -r -o StrictHostKeyChecking=no ${APP_DIR} ubuntu@${TOMCAT_SERVER}:${TOMCAT_DIR}
-                """
+            echo "CREDENTIALS_ID: ${CREDENTIALS_ID}"
+            echo "WAR_FILE: ${WAR_FILE}"
+            echo "TOMCAT_SERVER: ${TOMCAT_SERVER}"
+            echo "TOMCAT_DIR: ${TOMCAT_DIR}"
+            echo "APP_DIR: ${APP_DIR}"
             }
         }
     }
