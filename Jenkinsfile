@@ -3,7 +3,7 @@ pipeline {
       environment {
         TOMCAT_SERVER = 'root@52.66.204.22'
         TOMCAT_DIR = '/root/apache-tomcat-9.0.98/webapps/'
-        WAR_FILE = '/var/lib/jenkins/workspace/project/target/KuberApp.war'
+        WAR_FILE = '/var/lib/jenkins/workspace/kuberproject/target/KuberApp.war'
         APP_DIR = '/var/lib/jenkins/workspace/kuberproject/target/KuberApp'   
         CREDENTIALS_ID = 'ssh'  
     }
