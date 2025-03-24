@@ -45,7 +45,7 @@ pipeline {
                 withEnv(["KUBECONFIG=${env.WORKSPACE}/kubeconfig"]) {
                     sh '''
                     kubectl get nodes
-                    kubectl apply -f k8s/deployment.yml
+                    kubectl apply -f k8s/deployment.yaml
                     '''
                 }
             }
